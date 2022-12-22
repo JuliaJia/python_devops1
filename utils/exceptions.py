@@ -15,13 +15,22 @@ class YunOpsBaseException(exceptions.APIException):
     def get_message(cls):
         return {'code':cls.code,'message':cls.message}
 
-exc_map = {}
+class InvalidUserNameOrPassword(YunOpsBaseException):
+    code = 1
+    message = "用户名或密码错误"
+
+exc_map = {
+    'AuthenticationFailed': InvalidUserNameOrPassword,
+}
 
 
 def global_exception_handler(exc,context):
     response = exception_handler(exc,context)
     if response is not None:
-        errmessage = exc_map.get(exc.__class__.__name__,YunOpsBaseException).get_message()
-        return Response(errmessage)
+        if isinstance(exc,YunOpsBaseException):
+            errmessage = exc.get_message()
+        else:
+            errmessage = exc_map.get(exc.__class__.__name__,YunOpsBaseException).get_message()
+        return Response(errmessage,status=200)
     return response
 
