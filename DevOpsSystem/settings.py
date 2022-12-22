@@ -40,8 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_filters',
     'employee',
+    'user',
 ]
+
+AUTH_USER_MODEL = 'user.UserProfile'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -155,15 +159,18 @@ LOGGING = {
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER':'utils.exceptions.global_exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'utils.paginations.PageNumberPagination',
-    'PAGE_SIZE': 5,
+    'PAGE_SIZE': 20,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1)
 }
+
+APPEND_SLASH=False
