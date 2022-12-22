@@ -156,9 +156,12 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER':'utils.exceptions.global_exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'utils.paginations.PageNumberPagination',
     'PAGE_SIZE': 5,
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
 }
 
 SIMPLE_JWT = {

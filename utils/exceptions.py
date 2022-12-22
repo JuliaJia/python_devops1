@@ -9,7 +9,7 @@ from rest_framework.exceptions import PermissionDenied
 
 class YunOpsBaseException(exceptions.APIException):
     code = 10000
-    message = "未知错误，请联系管理员~！"
+    message = "非法请求"
 
     @classmethod
     def get_message(cls):
@@ -19,8 +19,19 @@ class InvalidUserNameOrPassword(YunOpsBaseException):
     code = 1
     message = "用户名或密码错误"
 
+class InvalidToken(YunOpsBaseException):
+    code = 2
+    message = "认证无效，请重新登录"
+
+class NotAuthenticated(YunOpsBaseException):
+    code = 3
+    message = "未登录，请重新登录"
+
+
 exc_map = {
     'AuthenticationFailed': InvalidUserNameOrPassword,
+    'InvalidToken': InvalidToken,
+    "NotAuthenticated": NotAuthenticated,
 }
 
 
