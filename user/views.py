@@ -1,8 +1,9 @@
+
 from django.contrib.auth import authenticate, login, logout, get_user_model
 
 # Create your views here.
 from django.http import HttpResponse, Http404
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes,action
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -11,6 +12,8 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import UserSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+
+from utils.exceptions import InvalidPassword
 
 
 @api_view(['POST','GET'])
@@ -39,12 +42,33 @@ class UserViewSet(ModelViewSet):
         request.data.pop('password', None)
         return super().partial_update(request,*args, **kwargs)
 
-    def get_object(self):
+    def get_object(self,status=None):
         if self.request.method.lower() != 'get':
             pk = self.kwargs.get('pk')
             if pk == 1 or pk == '1':
-                raise Http404
+                if status == None:
+                    raise Http404
+                else:
+                    return super().get_object()
         return super().get_object()
+    @action(['GET'], detail=False, url_path='whoami')
+    def whoami(self,request):
+        return Response({
+            'user': {
+                'id': request.user.id,
+                'username': request.user.username
+            }
+        })
+    @action(detail=True, methods=['post'], url_path='setpwd' )
+    def set_password(self, request, pk=None):
+        user = self.get_object(1)
+        if user.check_password(request.data["oldPassword"]):
+            print("test")
+            user.set_password(request.data["password"])
+            user.save()
+            return Response()
+        else:
+            raise InvalidPassword
 
     def get_queryset(self):
         queryset = super().get_queryset()

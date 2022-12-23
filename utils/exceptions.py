@@ -27,6 +27,10 @@ class NotAuthenticated(YunOpsBaseException):
     code = 3
     message = "未登录，请重新登录"
 
+class InvalidPassword(YunOpsBaseException):
+    code = 101
+    message = "密码验证错误"
+
 
 exc_map = {
     'AuthenticationFailed': InvalidUserNameOrPassword,

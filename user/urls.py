@@ -10,5 +10,5 @@ router.register("",UserViewSet)
 
 urlpatterns = [
     path('menulist/',menulist_view),
-path('<int:pk>',UserViewSet.as_view({'get':'retrieve','put':'update','patch':'partial_update','delete':'destroy'})),
+    path('<int:pk>',UserViewSet.as_view({'get':'retrieve','put':'update','patch':'partial_update','delete':'destroy'})),
 ] + router.urls

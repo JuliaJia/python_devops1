@@ -12,12 +12,12 @@ class UserSerializer(serializers.ModelSerializer):
             'email','is_active','phone'
         ]
         extra_kwargs = {
-            'username': {'max_length': 16, 'min_length':6},
+            'username': {'max_length': 16, 'min_length':4},
             'password': {"write_only": True},
             'is_superuser': {'default': False},
             'is_active': {'default': False}
         }
     def validate_password(self,value):
-        if 4 <= len(value) <= 16:
+        if 8 <= len(value) <= 16:
             return make_password(value)
-        raise serializers.ValidationError("密码的长度需要4到16个字符")
+        raise serializers.ValidationError("密码的长度需要8到16个字符")
