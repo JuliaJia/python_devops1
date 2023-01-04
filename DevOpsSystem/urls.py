@@ -30,4 +30,5 @@ urlpatterns = [
     path('test',test),
     path('login/',tobview,name='login'),
     path('users/',include('user.urls')),
+    path('cmdb/',include('cmdb.urls')),
 ]

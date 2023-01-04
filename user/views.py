@@ -11,6 +11,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
+from .models import UserProfile
 from .serializers import UserSerializer, PermSerializer, GroupSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
@@ -206,12 +207,22 @@ class MenuItem(dict):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated | IsAdminUser])
 def menulist_view(request:Request):
+    user:UserProfile = request.user
+    # auth = request.auth
     menulist = []
     if request.user.is_superuser:
         item = MenuItem(1,'用户管理')
         item.append(MenuItem(101,'用户列表','/users'))
         item.append(MenuItem(102, '角色列表', '/users/roles'))
         item.append(MenuItem(103, '权限列表', '/users/perms'))
+        menulist.append(item)
+
+    #CMDB权限
+    # print(user.username)
+    if user.has_perm('cmdb.can_citype'):
+        item = MenuItem(5,'CMDB')
+        item.append(MenuItem(501,'模型列表','/cmdb/citypes'))
+        item.append(MenuItem(502,'资产列表','/cmdb/cis'))
         menulist.append(item)
     print(menulist)
     return Response(menulist)

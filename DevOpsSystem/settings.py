@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_mongoengine',
     'django_filters',
     'employee',
     'user',
+    'cmdb',
 ]
 
 AUTH_USER_MODEL = 'user.UserProfile'
@@ -93,6 +95,12 @@ DATABASES = {
     }
 }
 
+MONGODB_DATABASES = {
+    'name': 'cmdb',
+    'host': 'localhost',
+    'port': 27017,
+    'tz_aware': True,
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
