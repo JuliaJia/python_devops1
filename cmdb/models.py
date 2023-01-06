@@ -1,5 +1,5 @@
 from mongoengine import (
-    Document,EmbeddedDocument,
+    Document,EmbeddedDocument,DynamicDocument,
     StringField,IntField,BooleanField,
     ListField,EmbeddedDocumentField
 )
@@ -26,3 +26,6 @@ class CiType(Document):
         return "CiType {}:{}, {}".format(
             self.name, self.version,self.fields
         )
+
+class Ci(DynamicDocument):
+    meta = {'collection': 'cis'}
